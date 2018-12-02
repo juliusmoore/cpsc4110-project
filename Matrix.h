@@ -1,6 +1,6 @@
 /// ***************************
 /// File: Matrix.h 
-
+/// 
 /// ***************************
 #ifndef MATRIX_H
 #define MATRIX_H
@@ -8,9 +8,9 @@
 #include <iostream>
 #include <vector>
 #include <complex>
+#include <string>
 
 using namespace std;
-
 
 
 template <class T>
@@ -22,8 +22,12 @@ class Matrix
    Matrix(const Matrix&);                 // copy constructor
    
    T& operator() (int, int);     // l-value overloaded operator
-   const T& operator() (int, int) const; // l-value overloaded operator
+   const T& operator() (int, int) const; // r-value overloaded operator
    
+   // Vector version of () opertor
+   T& operator() (int );     // l-value
+   const T& operator() (int) const; // r-value
+
    Matrix& operator= (const Matrix&); // overloaded assigment operator
    
    Matrix& operator+= (const Matrix&); // binary += operator
@@ -45,7 +49,7 @@ class Matrix
 
 // ++++++++++++++++++++
 // Non-member Functions
-// ++++++++++++++++++++++++++
+// +++++++++++++++++++++
 template <class T> Matrix<T> operator- (const Matrix<T>&);                // Negation
 template <class T> Matrix<T> operator+ (const Matrix<T>&, const Matrix<T>&); // binary addition  
 template <class T> Matrix<T> operator- (const Matrix<T>&, const Matrix<T>&); // binary subtraction
@@ -53,11 +57,12 @@ template <class T> Matrix<T> operator* (const Matrix<T>&, const Matrix<T>&); // 
 template <class T> Matrix<T> operator* (const Matrix<T>&, T);        		// Scaler multiplication RHS
 template <class T> Matrix<T> operator* (T d, const Matrix<T>&);      		// Scaler multiplication LHS
 template <class T> Matrix<T> tensor(const Matrix<T>&, const Matrix<T>& ); // Tensor Product 
+string cDisp(complex<double>, bool);
 template <class T> Matrix<T> trans(const Matrix<T>&);   // Transpostion
 template <class T> Matrix<T> conj(const Matrix<T>&); // Conjugate of Matrix
+template <class T> Matrix<T> dagger(const Matrix<T>&); // Conjugate Transpose (dagger)
 
-template <class T>
-ostream& operator<< (ostream&, const Matrix<T>&); // overloaded insertion operator
+template <class T> ostream& operator<< (ostream&, const Matrix<T>&); // overloaded insertion operator
 
 #include "Matrix.cpp"
 #endif
