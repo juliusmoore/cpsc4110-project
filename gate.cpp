@@ -4,6 +4,8 @@
 #include <complex>
 #include <string>
 #include <cctype>
+#include <fstream>
+#include <cstdlib>
 
 using namespace std;
 
@@ -127,16 +129,24 @@ Matrix<complex<double>> matrixFromStream (istream& a) {
 	return m;
 }
 
+Matrix<complex<double>> fileToMatrix(const string& name) {
+	ifstream in;
+	in.open(name);
+	return matrixFromStream(in);
+}
+
 int main() {
 	cout << "...I..." << endl;
 	string t;
 	while (true) {
 		cout << endl;
-		cout << "Tell me about the world." << endl;
-		Matrix<complex<double>> m = matrixFromStream(cin);
-		cout << "I understood:" << endl;
+		system("ls");
+		cout << "Name a matrix: " << flush;
+		cin >> t;
+		Matrix<complex<double>> m = fileToMatrix(t);
+		cout << endl;
+		cout << t << ":\n";
 		cout << m << endl;
-		cout << complexFromString(t) << endl;
 	}
 	return 0;
 }
