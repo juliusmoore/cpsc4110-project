@@ -93,11 +93,17 @@ bool Circuit::isValid() const {
 }
 
 Unit Circuit::asMatrix() const {
-	return groupTensor(gate);
+	if (gate.empty())
+		throw circuit_exception("the empty circuit was not defined");
+	Unit summary = gate[0];
+	for (int i = 1; i < gate.size(); ++i) {
+		summary = gate[i] * summary;
+	}
+	return summary;
 }
 
 Unit Circuit::getOutput() const {
 	if (qubit.empty())
 		throw circuit_exception{"no output without a circuit"};
-	return *qubit.end();
+	return *qubit.rbegin();
 }
