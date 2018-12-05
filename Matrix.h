@@ -500,7 +500,7 @@ template <class T> bool operator==(const Matrix<T>& m1, const Matrix<T>& m2){
 		return false;
 	for(int i=0; i < r; i++)
 		for(int j=0; j < c; j++)
-			if(m1(i,j)!=m2(i,j))
+			if(abs(m1(i,j) - m2(i,j)) > IOTA_CONST)
 				return false;
 	return true;
 }
