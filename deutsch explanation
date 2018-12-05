@@ -1,0 +1,31 @@
+0 - constant
+1 - not
+
+Deutsch's algorithm takes a "blackbox" matrix which implements one of the 4 balanced or constant functions from the set {0, 1} to the set {0, 1}. It's purpose is to discover whether the function is constant or balanced, and it acomplishes this by evaluating the function only once. To do this, deutsch's algorithm takes advantage of the superposition states that the Hadamard matrix creates; essentially feeding all of these states into the function; then evaluating that function's output. The top qubit, which is entangled, is read to determine the output: If it evaluates to 0, the blackbox is constant. Alternatively, it can evaluate to 1, which implies that the blackbox is balanced. The bottom qubit is discarded, and has a 50% chance of evaluating to either 1 or 0, and so contains no true information about the function through which it passed.
+
+There are four functions from {0, 1} to {0, 1}, and so four unitary matrices are used to represent them in our program. Say x is the top qubit and y is the bottom qubit. x emerges unchanged after passing through these matrices, being the control variable, while y emerges as y XOR f(x). Strangely enough, it is the top qubit x, that is evaluated. Some example matrices, and the functions they correspond to, are shown below, along with an image of the quantum circuit diagram.
+
+
+1 0 0 0
+0 1 0 0
+0 0 1 0
+0 0 0 1
+f(x) = 0
+
+0 1 0 0
+1 0 0 0
+0 0 0 1
+0 0 1 0
+f(x) = 1
+
+0 1 0 0
+1 0 0 0
+0 0 1 0
+0 0 0 1
+f(x) = x
+
+1 0 0 0
+0 1 0 0
+0 0 0 1
+0 0 1 0
+f(x) = NOT(x)
