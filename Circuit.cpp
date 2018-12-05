@@ -86,3 +86,17 @@ Unit Circuit::getGate(const size_t i) const {
 		throw circuit_exception("referenced gate is outside the circuit");
 	return gate[i];
 }
+
+bool Circuit::isValid() const {
+	return asMatrix().isUnitary();
+}
+
+Unit Circuit::asMatrix() const {
+	return groupTensor(gate);
+}
+
+Unit Circuit::getOutput() const {
+	if (qubit.empty())
+		throw circuit_exception{"no output without a circuit"};
+	return *qubit.end();
+}

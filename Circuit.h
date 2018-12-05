@@ -40,6 +40,12 @@ public:
 	Unit getQubit(const size_t i) const;
 	
 	Unit getGate(const size_t i) const;
+	
+	bool isValid() const;
+	
+	Unit asMatrix() const;
+	
+	Unit getOutput() const;
 };
 
 #endif
