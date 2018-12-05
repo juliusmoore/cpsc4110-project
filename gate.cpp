@@ -56,13 +56,6 @@ int main() {
 		t.push_back(HADAMARD);
 		c.push_back(t);
 		t.clear();
-		t.push_back(uf);
-		c.push_back(t);
-		t.clear();
-		t.push_back(HADAMARD);
-		t.push_back(IDENTITY);
-		c.push_back(t);
-		t.clear();
 		t.push_back(ZERO);
 		t.push_back(ONE);
 		c.simulate(t);

@@ -35,7 +35,6 @@ void Circuit::push_back(const Pretensor& gateColumn) {
 	if (gateColumn.empty())
 		throw circuit_exception{"attempted to push_back no gates"};
 	Unit fullGate = groupTensor(gateColumn);
-	cout << "GOT HERE" << endl;
 	if (fullGate.nrows() != fullGate.ncols())
 		throw circuit_exception{"attempted to push back a non-square 'gate'"};
 	if (floorLogBase2(fullGate.nrows()) != expectedSize) {
@@ -64,7 +63,7 @@ void Circuit::simulate(const Pretensor& qubitColumn) {
 		throw circuit_exception("We use kets for our qubits.");
 	qubit[0] = allQubits;
 	for (int i = 0; i < gate.size(); ++i) {
-		qubit[i+1] = gate[0] * qubit[0];
+		qubit[i+1] = gate[i] * qubit[i];
 	}
 }
 
