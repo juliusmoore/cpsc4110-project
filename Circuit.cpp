@@ -93,7 +93,10 @@ bool Circuit::isValid() const {
 }
 
 Unit Circuit::asMatrix() const {
-	return groupTensor(gate);
+	Unit u = groupTensor(gate);
+	cout << "AS MATRIX: GROUP TENSOR:" << endl;
+	cout << u << endl;
+	return u;
 }
 
 Unit Circuit::getOutput() const {

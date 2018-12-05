@@ -9,9 +9,14 @@
 #include <vector>
 #include <complex>
 #include <string>
+#include <cmath>
 
 using namespace std;
 
+const double IOTA_CONST=0.000000001; // Constant very small (almost zero) to allow for the fact that
+                                             // due to inexact representations of irrational numbers something 
+                                             // that should be zero will not be recognized as zero in equality
+                                             // comparisons.
 
 template <class T>
 class Matrix
@@ -125,9 +130,13 @@ template <class T> bool Matrix<T>::isUnitary(){
 		return false;
 	for(int i=0; i < tmp.nrows(); i++)
 		for(int j=0; j < tmp.ncols(); j++){
-			if((i == j) && (tmp(i,j) != 1.))
-				return false;
-			if((i != j)&&(tmp(i,j) != 0.))
+			T a;
+			if(i == j)
+				a = 1.;
+			if(i != j)
+				a = 0.;
+			const T diff = a - tmp(i, j);
+			if (abs(diff) > IOTA_CONST)
 				return false;
 		}
 	return true;
@@ -401,10 +410,6 @@ template <class T> ostream& operator<<(ostream& oStr, const Matrix<T>& m)
 ///          imaginary coeffient is -+1 it is omitted and only +-i is added.
 /// --------------------------------------------------------
 template <class T> string cDisp(T c, bool nobrack_override){
-	const double IOTA_CONST=0.00000000000001; // Constant very small (almost zero) to allow for the fact that
-                                             // due to inexact representations of irrational numbers something 
-                                             // that should be zero will not be recognized as zero in equality
-                                             // comparisons.
 	std::ostringstream strs;
 	std::string str;
    
