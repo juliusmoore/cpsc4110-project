@@ -1,9 +1,9 @@
 
+#include <complex>
 #include"./Matrix.h"
 #include<iostream>
 #include<fstream>
 #include<vector>
-#include <complex>
 #include <cmath>
 using namespace std;
 class Qubit {

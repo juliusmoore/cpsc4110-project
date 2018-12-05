@@ -1,0 +1,6 @@
+To compile enter:
+g++ -std=c++11 -c *.cpp
+g++ *.o -o gate
+
+To run enter:
+./gate
