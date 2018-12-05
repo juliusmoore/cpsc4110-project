@@ -34,14 +34,15 @@ class Matrix
    Matrix& operator-= (const Matrix&);
    Matrix& operator*= (const Matrix&);
    Matrix& operator*= (T);     // binary *= for a scalar
-   
+   bool isUnitary();  
+   bool isHerm(); 
    void print(ostream&) const;             // print function
    int nrows() const;                      // return object number of rows
    int ncols() const;                      // return object number of cols
    
   protected:
-   unsigned int rows; // # of rows
-   unsigned int cols; // # Cols 
+   int rows; // # of rows
+   int cols; // # Cols 
    T* dPtr;  // Heap ptr
    
    void copy(const Matrix&); // copy Matrix 
@@ -58,8 +59,9 @@ template <class T> Matrix<T> operator* (const Matrix<T>&, T);        		// Scaler
 template <class T> Matrix<T> operator* (T d, const Matrix<T>&);      		// Scaler multiplication LHS
 template <class T> Matrix<T> tensor(const Matrix<T>&, const Matrix<T>& ); // Tensor Product
 template <class T> string cDisp(T c, bool nobrack_override=false);
+template <class T> bool operator== (const Matrix<T>&, const Matrix<T>& );
 template <class T> Matrix<T> trans(const Matrix<T>&);   // Transpostion
-template <class T> Matrix<T> conj(const Matrix<T>&); // Conjugate of Matrix
+template <class T> Matrix<T> conj(const Matrix<T> &); // Conjugate of Matrix
 template <class T> Matrix<T> dagger(const Matrix<T>&); // Conjugate Transpose (dagger)
 
 template <class T> ostream& operator<< (ostream&, const Matrix<T>&); // overloaded insertion operator
@@ -85,7 +87,7 @@ template <class T> Matrix<T>::Matrix(int r, int c, T initVal){
       rows = r;
       cols = c;
       dPtr = new T[rows*cols];
-      for(unsigned int i=0; i<rows*cols; i++) // Set values
+      for(int i=0; i<rows*cols; i++) // Set values
 		dPtr[i] = initVal;  
    }
    else
@@ -114,6 +116,29 @@ template <class T> T& Matrix<T>::operator()(int r, int c)
    assert(r >= 0 && r < rows && c >= 0 && c < cols);
    return dPtr[r * cols + c];
 }
+
+
+/// Is Unitary test
+template <class T> bool Matrix<T>::isUnitary(){
+	Matrix<T> tmp=(*this)*(dagger(*this));
+	if((*this).nrows()!=(*this).ncols())
+		return false;
+	for(int i=0; i < tmp.nrows(); i++)
+		for(int j=0; j < tmp.ncols(); j++){
+			if((i == j) && (tmp(i,j) != 1.))
+				return false;
+			if((i != j)&&(tmp(i,j) != 0.))
+				return false;
+		}
+	return true;
+	
+}
+template <class T> bool Matrix<T>::isHerm(){
+	if((*this).nrows()!=(*this).ncols())
+		return false;
+	return (*this) == dagger((*this));
+}
+
 
 /// r-value version
 
@@ -164,7 +189,7 @@ template <class T> void Matrix<T>::copy(const Matrix& m)
    rows = m.rows;
    cols = m.cols;
    dPtr = new T[rows*cols];
-   for(unsigned int i=0; i<rows*cols; i++)
+   for(int i=0; i<rows*cols; i++)
       dPtr[i] = m.dPtr[i];
 }
       
@@ -175,7 +200,7 @@ template <class T>
 Matrix<T>& Matrix<T>::operator+=(const Matrix& m)
 {
    assert(nrows() == m.nrows() && ncols() == m.ncols());
-   for(unsigned int i=0; i<m.rows*m.cols; i++)
+   for(int i=0; i<m.rows*m.cols; i++)
       dPtr[i] = dPtr[i] + m.dPtr[i]; // add corresponding elements
    return *this;
 }
@@ -186,7 +211,7 @@ Matrix<T>& Matrix<T>::operator+=(const Matrix& m)
 template <class T> Matrix<T>& Matrix<T>::operator-=(const Matrix& m)
 {
    assert(nrows() == m.nrows() && ncols() == m.ncols());
-   for(unsigned int i=0; i< rows * cols; i++)
+   for(int i=0; i< rows * cols; i++)
       dPtr[i] = dPtr[i] - m.dPtr[i];
    return *this;
 }
@@ -198,9 +223,9 @@ template <class T> Matrix<T>& Matrix<T>::operator*=(const Matrix& m)
 {
    assert(cols == m.rows); // check for matching dimension
    Matrix tmp(rows, m.cols);
-   for(unsigned int i = 0; i < rows; i++)
-      for(unsigned int j = 0; j < m.cols; j++)
-	 for(unsigned int k = 0; k < cols; k++)
+   for(int i = 0; i < rows; i++)
+      for(int j = 0; j < m.cols; j++)
+	 for(int k = 0; k < cols; k++)
 	    tmp(i,j) += (*this)(i,k) * m(k,j); // calls overloaded ()
    *this = tmp;
    return *this; // allows for concatenation of *=
@@ -212,11 +237,11 @@ template <class T> Matrix<T>& Matrix<T>::operator*=(const Matrix& m)
 template <class T>
 Matrix<T>& Matrix<T>::operator*=(T d)
 {
-   for(unsigned int i=0; i<rows; i++)
-      for(unsigned int j = 0; j < cols; j++)
+   for(int i=0; i<rows; i++)
+      for(int j = 0; j < cols; j++)
 	 (*this)(i,j) *= d; // multiply each matrix element by d
    // or
-   // for(unsigned int i=0; i<rows*cols; i++)
+   // for(int i=0; i<rows*cols; i++)
    //    dPtr[i] *= d;
    return *this;
 }
@@ -227,7 +252,7 @@ Matrix<T>& Matrix<T>::operator*=(T d)
 template <class T> void Matrix<T>::print(ostream& oStr) const
 {
    if(rows > 0 && cols > 0)
-      for(unsigned int i=0; i<rows; i++)
+      for(int i=0; i<rows; i++)
       {
 	      oStr << '|';
 	      for(int j=0; j<cols; j++)
@@ -315,12 +340,12 @@ template <class T> Matrix<T> tensor(Matrix<T>& a, Matrix<T>& b)
 /// -------------------------
 template <class T> Matrix<T> trans(const Matrix<T>& m)
 {
-   unsigned int r=m.nrows();
-   unsigned int c=m.ncols();
+   int r=m.nrows();
+   int c=m.ncols();
    Matrix<T> tmp(c,r,0);
    
-   for(unsigned int i=0; i< c; i++)
-      for(unsigned int j=0; j < r; j++)
+   for(int i=0; i< c; i++)
+      for(int j=0; j < r; j++)
          tmp(i,j)=m(j,i);
    return tmp;
 }
@@ -329,10 +354,10 @@ template <class T> Matrix<T> conj(Matrix<T>& m)
 {
    Matrix<T> tmp(m);
 
-      unsigned int nCols=m.ncols();
-      unsigned int nRows=m.nrows();
-      for(unsigned int i=0; i < nRows; i++)
-         for(unsigned int j=0; j < nCols; j++)
+      int nCols=m.ncols();
+      int nRows=m.nrows();
+      for(int i=0; i < nRows; i++)
+         for(int j=0; j < nCols; j++)
             tmp(i,j)=std::conj(m(i,j));
       
    return tmp;
@@ -343,12 +368,12 @@ template <class T> Matrix<T> conj(Matrix<T>& m)
 /// ------------------------------
 template <class T> Matrix<T> dagger(const Matrix<T>& m)
 {
-   unsigned int r=m.nrows();
-   unsigned int c=m.ncols();
+   int r=m.nrows();
+   int c=m.ncols();
    Matrix<T> tmp(c,r,0);
    
-   for(unsigned int i=0; i< c; i++)
-      for(unsigned int j=0; j < r; j++)
+   for(int i=0; i< c; i++)
+      for(int j=0; j < r; j++)
          tmp(i,j)=std::conj(m(j,i));
    return tmp;
 }
@@ -459,4 +484,19 @@ template <class T> string cDisp(T c, bool nobrack_override){
 	return str; // Return string
 }
 
+/// *******************
+/// Equality operator ==
+
+template <class T> bool operator==(const Matrix<T>& m1, const Matrix<T>& m2){
+	int r = m1.nrows();
+	int c = m1.ncols();
+	
+	if((r != m2.nrows())||(c!=m2.ncols()) )
+		return false;
+	for(int i=0; i < r; i++)
+		for(int j=0; j < c; j++)
+			if(m1(i,j)!=m2(i,j))
+				return false;
+	return true;
+}
 #endif
