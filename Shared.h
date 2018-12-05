@@ -11,7 +11,7 @@
 #ifndef SHARED_H
 #define SHARED_H
 
-extern Matrix<complex<double>> IDENTITY, U2Q_NOT, CNOT, TOFFOLI, U2Q_ONE, HADAMARD, U2Q_IDENTITY, U2Q_ZERO, NOTHING;
+extern Matrix<complex<double>> IDENTITY, U2Q_NOT, CNOT, TOFFOLI, U2Q_ONE, HADAMARD, U2Q_IDENTITY, U2Q_ZERO, NOTHING, ONE, ZERO;
 
 //setup globals
 void SETUP();

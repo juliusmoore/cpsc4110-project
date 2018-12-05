@@ -13,7 +13,7 @@ typedef Matrix<complex<double>> Unit;
 typedef vector<Unit> Pretensor;
 
 Unit Circuit::groupTensor(const Pretensor& pretensor) const {
-	if (pretensor.empty());
+	if (pretensor.empty())
 		throw circuit_exception{"tensor product of the empty matrix not implemented"};
 	Unit t = pretensor[0];
 	for (int i = 1; i < pretensor.size(); ++i) {
@@ -35,6 +35,7 @@ void Circuit::push_back(const Pretensor& gateColumn) {
 	if (gateColumn.empty())
 		throw circuit_exception{"attempted to push_back no gates"};
 	Unit fullGate = groupTensor(gateColumn);
+	cout << "GOT HERE" << endl;
 	if (fullGate.nrows() != fullGate.ncols())
 		throw circuit_exception{"attempted to push back a non-square 'gate'"};
 	if (floorLogBase2(fullGate.nrows()) != expectedSize) {

@@ -13,7 +13,34 @@
 using namespace std;
 
 int main() {
-	
+	SETUP();
+	try {
+		Circuit c{1};
+		vector<Matrix<complex<double>>> t;
+		cout << "About to add gates" << endl;
+		t.push_back(HADAMARD);
+		c.push_back(t);
+		cout << "About to add qubits" << endl;
+		t.clear();
+		t.push_back(ONE);
+		c.simulate(t);
+		cout << "\n\n";
+		cout << "We have output ready!" << endl;
+		cout << "Valid Circuit? " << c.isValid() << endl;
+		cout << "The circuit is also a Matrix!" << endl;
+		cout << c.asMatrix();
+		cout <<  endl << endl;
+		cout << "Gates: " << endl;
+		for (int i = 0; i < c.gates(); ++i) {
+			cout << c.getGate(i) << endl;
+		}
+		cout << "Qubits: " << endl;
+		for (int i = 0; i < c.qubits(); ++i) {
+			cout << c.getQubit(i) << endl;
+		}
+	} catch (circuit_exception e) {
+		cout << e.what() << endl;
+	}
 	return 0;
 }
 

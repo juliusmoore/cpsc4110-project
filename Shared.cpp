@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Matrix<complex<double>> IDENTITY, U2Q_NOT, CNOT, TOFFOLI, U2Q_ONE, HADAMARD, U2Q_IDENTITY, U2Q_ZERO, NOTHING;
+Matrix<complex<double>> IDENTITY, U2Q_NOT, CNOT, TOFFOLI, U2Q_ONE, HADAMARD, U2Q_IDENTITY, U2Q_ZERO, NOTHING, ONE, ZERO;
 
 void SETUP() {
 	IDENTITY = fileToMatrix("IDENTITY");
@@ -14,6 +14,8 @@ void SETUP() {
 	U2Q_IDENTITY = fileToMatrix("U2Q_IDENTITY");
 	U2Q_ZERO = fileToMatrix("U2Q_ZERO");
 	NOTHING = fileToMatrix("NOTHING");
+	ONE = fileToMatrix("ONE");
+	ZERO = fileToMatrix("ZERO");
 }
 
 uint64_t floorLogBase2(uint64_t a) {
