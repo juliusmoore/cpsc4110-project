@@ -6,13 +6,20 @@
 #include <cctype>
 #include <fstream>
 #include <cstdlib>
+#include <exception>
 
 #ifndef SHARED_H
 #define SHARED_H
 
-extern Matrix<complex<double>> IDENTITY, U2Q_NOT, CNOT, TOFFOLI, U2Q_ONE, HADAMARD, U2Q_IDENTITY, U2Q_ZERO;
+extern Matrix<complex<double>> IDENTITY, U2Q_NOT, CNOT, TOFFOLI, U2Q_ONE, HADAMARD, U2Q_IDENTITY, U2Q_ZERO, NOTHING;
 
+//setup globals
 void SETUP();
+
+//integer maths
+uint64_t floorLogBase2(uint64_t);
+
+//kept from prototyping
 long long stringToLongLong(const string& a);
 complex<long double> complexFromString(const string& t);
 bool getField(string& a, complex<long double>& field);

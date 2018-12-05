@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Matrix<complex<double>> IDENTITY, U2Q_NOT, CNOT, TOFFOLI, U2Q_ONE, HADAMARD, U2Q_IDENTITY, U2Q_ZERO;
+Matrix<complex<double>> IDENTITY, U2Q_NOT, CNOT, TOFFOLI, U2Q_ONE, HADAMARD, U2Q_IDENTITY, U2Q_ZERO, NOTHING;
 
 void SETUP() {
 	IDENTITY = fileToMatrix("IDENTITY");
@@ -13,6 +13,17 @@ void SETUP() {
 	HADAMARD = fileToMatrix("HADAMARD");
 	U2Q_IDENTITY = fileToMatrix("U2Q_IDENTITY");
 	U2Q_ZERO = fileToMatrix("U2Q_ZERO");
+	NOTHING = fileToMatrix("NOTHING");
+}
+
+uint64_t floorLogBase2(uint64_t a) {
+	if (a == 0)
+		throw invalid_argument{"The log of zero is undefined."};
+	uint64_t i = 0;
+	while (a >>= 1) {
+		++i;
+	}
+	return i;
 }
 
 long long stringToLongLong(const string& a) {

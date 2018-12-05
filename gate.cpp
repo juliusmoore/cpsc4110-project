@@ -8,9 +8,16 @@
 
 #include "Matrix.h"
 #include "Shared.h"
+#include "Circuit.h"
 
 using namespace std;
 
+int main() {
+	
+	return 0;
+}
+
+/*
 int main() {
 	cout << "...I..." << endl;
 	string t;
@@ -26,6 +33,7 @@ int main() {
 	}
 	return 0;
 }
+*/
 
 /*
 int main() {
